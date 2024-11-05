@@ -1,0 +1,109 @@
+<resources>
+    <string name="app_name">Coursework</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="create_account">CREATE ACCOUNT</string>
+    <string name="re_enter_password">Re-Enter Password</string>
+    <string name="enter_email_address">Enter Email Address</string>
+    <string name="refresh_icon">Refresh Icon</string>
+    <string name="profile_icon">Profile Icon</string>
+    <string name="log_off_action">Log Off</string>
+    <string name="settings_action">Settings</string>
+    <string name="number_of_questions">Number Of Questions:</string>
+    <string name="choose_a_category">Choose a Category:</string>
+    <string name="choose_a_difficulty">Choose a Difficulty:</string>
+    <string name="choose_the_type_of_questions">Choose the Type of Questions:</string>
+    <string name="save_preferences">SAVE PREFERENCES</string>
+    <string name="delete_account">DELETE ACCOUNT</string>
+    <string name="home_icon">Home Icon</string>
+    <string name="user_settings">User Settings</string>
+    <string name="question_settings">Question Settings</string>
+    <string name="clear_preferences">Clear Preferences</string>
+    <string name="achievements">Achievements</string>
+    <string name="enter_full_name">Enter Full Name</string>
+
+    <string-array name="num_of_questions_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="categories_array">
+        <item>Any</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="difficulty_array">
+        <item>Any</item>
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
+
+    <string-array name="type_of_questions_array">
+        <item>Any</item>
+        <item>Multiple Choice</item>
+        <item> True / False</item>
+    </string-array>
+
+    <string-array name="settings_tab_array">
+        <item>Question Settings</item>
+        <item>User Settings</item>
+    </string-array>
+
+    <string-array name="question_time_array">
+        <item>00:00</item>
+        <item>01:00</item>
+        <item>02:00</item>
+        <item>03:00</item>
+        <item>04:00</item>
+        <item>05:00</item>
+        <item>06:00</item>
+        <item>07:00</item>
+        <item>08:00</item>
+        <item>09:00</item>
+        <item>10:00</item>
+        <item>11:00</item>
+        <item>12:00</item>
+        <item>13:00</item>
+        <item>14:00</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>17:00</item>
+        <item>18:00</item>
+        <item>19:00</item>
+        <item>20:00</item>
+        <item>21:00</item>
+        <item>22:00</item>
+        <item>23:00</item>
+    </string-array>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="question_description">question description</string>
+    <string name="enter_new_username">Enter New Username</string>
+    <string name="change_username">CHANGE USERNAME</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="change_password">CHANGE PASSWORD</string>
+    <string name="enter_new_email_address">Enter New Email Address</string>
+    <string name="change_email">CHANGE EMAIL</string>
+    <string name="question_refresh_time">Question Refresh Time</string>
+    <string name="previous_responses_action">Previous Responses</string>
+
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.LoginActivity"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/loginUserNameInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="260dp"
+        android:hint="@string/enter_username"
+        android:inputType="text"/>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/loginPassWordInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="40dp"
+        android:hint="@string/enter_password"
+        android:inputType="text"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/loginSignInBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_in" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/loginCreateAccountBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/create_account" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
+

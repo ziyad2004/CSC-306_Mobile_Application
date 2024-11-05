@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/refresh"
+        android:title="@string/refresh_icon"
+        android:icon="@drawable/refresh_image"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/profile"
+        android:title="@string/profile_icon"
+        android:icon="@drawable/profile_image"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/actionPreviousResponses"
+        android:title="@string/previous_responses_action" />
+
+    <item
+        android:id="@+id/actionAchievements"
+        android:title="@string/achievements" />
+
+    <item
+        android:id="@+id/actionSettings"
+        android:title="@string/settings_action" />
+
+    <item
+        android:id="@+id/actionLogoff"
+        android:title="@string/log_off_action" />
+
+</menu>

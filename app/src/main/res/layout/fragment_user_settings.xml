@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.LoginActivity"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/settingsOgUsrNameInput"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_username" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/settingsNewUsrNameInput"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_new_username" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/updateUsrNameBtn"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_username" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/settingsOgPassWordInput"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_password" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/settingsNewPassWordInput"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_new_password" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/updatePassWordBtn"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_password" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/settingsOgEmailAddressInput"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_email_address" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/settingsNewEmailAddressInput"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_new_email_address" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/updateEmailAddressBtn"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_email" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/deleteAccountBtn"
+        android:layout_marginTop="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_account" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
