@@ -15,8 +15,12 @@ import com.example.coursework.Question
 import com.example.coursework.R
 import com.example.coursework.adapters.QuestionRecyclerAdapter
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 
 class HomePageActivity : AppCompatActivity() {
+
+    private var mAuth = FirebaseAuth.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
@@ -65,8 +69,8 @@ class HomePageActivity : AppCompatActivity() {
                 snackBar.show()
                 return true
             }
-            R.id.actionLogoff -> {
-                loginActivityShow()
+            R.id.actionLogOut -> {
+                logOut()
                 return true
             }
             R.id.actionSettings -> {
@@ -91,7 +95,8 @@ class HomePageActivity : AppCompatActivity() {
     }
 
 
-    private fun loginActivityShow() {
+    private fun logOut() {
+        mAuth.signOut()
         val loginIntent = Intent(this, LoginActivity::class.java)
         loginIntent.putExtra("loggedOff", true)
         startActivity(loginIntent)

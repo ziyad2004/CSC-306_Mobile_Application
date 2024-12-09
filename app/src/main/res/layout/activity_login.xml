@@ -5,16 +5,16 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activities.LoginActivity"
-    android:id="@+id/main"
+    android:id="@+id/loginView"
     android:orientation="vertical"
     android:gravity="center_horizontal">
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/loginUserNameInput"
+        android:id="@+id/loginEmailInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="260dp"
-        android:hint="@string/enter_username"
+        android:hint="@string/enter_email_address"
         android:inputType="text"/>
 
     <com.google.android.material.textfield.TextInputEditText

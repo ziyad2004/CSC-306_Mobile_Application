@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Coursework</string>
-    <string name="enter_username">Enter Username</string>
     <string name="enter_password">Enter Password</string>
     <string name="sign_in">SIGN IN</string>
     <string name="create_account">CREATE ACCOUNT</string>
@@ -8,7 +7,7 @@
     <string name="enter_email_address">Enter Email Address</string>
     <string name="refresh_icon">Refresh Icon</string>
     <string name="profile_icon">Profile Icon</string>
-    <string name="log_off_action">Log Off</string>
+    <string name="log_out_action">Log Out</string>
     <string name="settings_action">Settings</string>
     <string name="number_of_questions">Number Of Questions:</string>
     <string name="choose_a_category">Choose a Category:</string>
@@ -22,6 +21,11 @@
     <string name="clear_preferences">Clear Preferences</string>
     <string name="achievements">Achievements</string>
     <string name="enter_full_name">Enter Full Name</string>
+    <string name="user_already_logged_in">You are already logged in</string>
+    <string name="account_creation_error_msg">Email already registered or passwords do not match</string>
+    <string name="empty_fields_msg">Please fill out all fields</string>
+    <string name="login_error_msg">Email or Password Incorrect</string>
+    <string name="log_out_msg">You have logged out</string>
 
     <string-array name="num_of_questions_array">
         <item>1</item>

@@ -14,7 +14,7 @@
         android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_username" />
+        android:hint="@string/enter_email_address" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/settingsNewUsrNameInput"

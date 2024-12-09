@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activities.LoginActivity"
-    android:id="@+id/main"
+    android:id="@+id/createAccountView"
     android:orientation="vertical"
     android:gravity="center_horizontal">
 
@@ -19,11 +19,11 @@
         android:inputType="text"/>
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/createAccountUserNameInput"
+        android:id="@+id/createAccountEmailInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:hint="@string/enter_username"
+        android:hint="@string/enter_email_address"
         android:inputType="text"/>
 
     <com.google.android.material.textfield.TextInputEditText
@@ -39,20 +39,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="40dp"
         android:hint="@string/re_enter_password"
         android:inputType="text"/>
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/emailAddressInput"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="40dp"
-        android:hint="@string/enter_email_address"
-        android:inputType="text"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/loginCreateAccountBtn"
+        android:id="@+id/createAccountBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_account" />
