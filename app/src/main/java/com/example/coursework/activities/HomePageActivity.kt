@@ -6,20 +6,21 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.coursework.Question
 import com.example.coursework.R
-import com.example.coursework.adapters.QuestionRecyclerAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.JsonObject
+import com.koushikdutta.ion.Ion
+import org.json.JSONArray
 
 class HomePageActivity : AppCompatActivity() {
 
     private var mAuth = FirebaseAuth.getInstance()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,28 +32,22 @@ class HomePageActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Home Page"
 
-
-        val numOfQuestionsList = populateNumOfQuestionsList()
-
-        val recyclerView = findViewById<View>(R.id.homePageRecyclerView) as RecyclerView // Bind to the recyclerview in the layout
-        val layoutManager = LinearLayoutManager(this) // Get the layout manager
-        recyclerView.layoutManager = layoutManager
-
-        val mAdapter = QuestionRecyclerAdapter(numOfQuestionsList)
-        recyclerView.adapter = mAdapter
-
+        val startQuizBtn = findViewById<Button>(R.id.startQuizBtn)
+        startQuizBtn.setOnClickListener {v -> startQuiz(v)}
     }
 
-
-    private fun populateNumOfQuestionsList(): ArrayList<Question> {
-        val list = ArrayList<Question>()
-        for (i in 1 .. 10) {
-            val settingsOptionModel = Question("question description", R.drawable.hourglass)
-            list.add(settingsOptionModel)
-        }
-        return list
+    // https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple
+    private fun startQuiz(view: View) {
+        Ion.with(this)
+            .load("https://opentdb.com/api.php?amount=5&category=9&difficulty=easy&type=multiple")
+            .asString()
+            .setCallback {ex, result ->
+                val quizPageIntent = Intent(this, QuizActivity::class.java)
+                quizPageIntent.putExtra("quizData", result)
+                quizPageIntent.putExtra("numOfQuestions", 5)
+                startActivity(quizPageIntent)
+            }
     }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -50,6 +50,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signIn(view: View) {
+        val homePageIntent = Intent(this, HomePageActivity::class.java)
+        startActivity(homePageIntent)
+        /*
         if ((emailText.text.toString() != "") && (pwText.text.toString() != "")) {
             mAuth.signInWithEmailAndPassword(
                 emailText.text.toString(),
@@ -68,6 +71,8 @@ class LoginActivity : AppCompatActivity() {
         } else {
             displayMsg(view, getString(R.string.login_error_msg))
         }
+
+         */
     }
 
     private fun displayMsg(view: View, msg: String) {

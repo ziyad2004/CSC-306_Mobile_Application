@@ -18,20 +18,20 @@ class BooleanQuestionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val homeRecyclerView = activity?.findViewById<RecyclerView>(R.id.homePageRecyclerView)
-        homeRecyclerView?.visibility = View.GONE
+        val questionRecyclerView = activity?.findViewById<RecyclerView>(R.id.quizRecyclerView)
+        questionRecyclerView?.visibility = View.GONE
 
-        val numOfQuestionsList = populateQuestionChoiceList()
+        //val numOfQuestionsList = populateQuestionChoiceList()
 
         val recyclerView = view.findViewById<View>(R.id.booleanChoiceRecycler) as RecyclerView // Bind to the recyclerview in the layout
         val layoutManager = LinearLayoutManager(view.context) // Get the layout manager
         recyclerView.layoutManager = layoutManager
 
-        val mAdapter = QuestionRecyclerAdapter(numOfQuestionsList)
-        recyclerView.adapter = mAdapter
+        //val mAdapter = QuestionRecyclerAdapter(numOfQuestionsList)
+        //recyclerView.adapter = mAdapter
 
     }
-
+/*
     private fun populateQuestionChoiceList(): ArrayList<Question> {
         val list = ArrayList<Question>()
         val trueModel = Question("True")
@@ -41,11 +41,13 @@ class BooleanQuestionFragment : Fragment() {
         return list
     }
 
+ */
+
 
     override fun onPause() {
         super.onPause()
         // Show the RecyclerView when leaving the fragment
-        val recyclerView = activity?.findViewById<RecyclerView>(R.id.homePageRecyclerView)
+        val recyclerView = activity?.findViewById<RecyclerView>(R.id.quizRecyclerView)
         recyclerView?.visibility = View.VISIBLE
     }
 }

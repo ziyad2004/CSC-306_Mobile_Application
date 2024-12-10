@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.Coursework"
         tools:targetApi="33">
+        <activity
+            android:name=".activities.QuizActivity"
+            android:exported="false"
+            android:theme="@style/Base.Theme.Coursework" />
         <activity
             android:name=".activities.ProfileActivity"
             android:exported="false" />
@@ -32,7 +38,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

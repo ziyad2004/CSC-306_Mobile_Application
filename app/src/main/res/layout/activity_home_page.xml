@@ -16,15 +16,11 @@
         app:titleTextColor="@color/white"
         android:background="@color/design_default_color_secondary_variant" />
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/homePageRecyclerView"
-        android:layout_width="match_parent"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/startQuizBtn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
-    </FrameLayout>
+        android:layout_marginTop="250dp"
+        android:text="@string/sign_in" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
