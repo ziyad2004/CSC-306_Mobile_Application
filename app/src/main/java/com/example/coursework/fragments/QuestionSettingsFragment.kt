@@ -1,18 +1,34 @@
 package com.example.coursework.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
+import com.example.coursework.QuizSettings
 import com.example.coursework.R
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 class QuestionSettingsFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var areSpinnersInitialised = true
+    private var mAuth = FirebaseAuth.getInstance()
+    private var db = FirebaseFirestore.getInstance()
+    private var quizSettings = QuizSettings (
+        1,
+        "Any",
+        "Any",
+        "Any",
+        "00:00"
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         inflater.inflate(R.layout.fragment_question_settings, container, false)!!
@@ -78,29 +94,74 @@ class QuestionSettingsFragment : Fragment(), AdapterView.OnItemSelectedListener 
         typeOfQuestionsSpinner.onItemSelectedListener = this
         areSpinnersInitialised = true
 
+
+        setSpinners(questionsTimeSpinner,
+            numOfQuestionsSpinner,
+            categoriesSpinner,
+            difficultySpinner,
+            typeOfQuestionsSpinner,
+            view)
+
+        val saveSettingsBtn = view.findViewById<Button>(R.id.saveSettingsBtn)
+        saveSettingsBtn.setOnClickListener { _ -> saveSettings(view)}
+
+        val clearSettingsBtn = view.findViewById<Button>(R.id.clearSettingsBtn)
+        clearSettingsBtn.setOnClickListener { _ -> clearSettings(questionsTimeSpinner,
+                                                                numOfQuestionsSpinner,
+                                                                categoriesSpinner,
+                                                                difficultySpinner,
+                                                                typeOfQuestionsSpinner)}
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (!areSpinnersInitialised) return
         when (parent?.id) {
             R.id.numOfQuestionsSpinner -> {
-                val selectedItem = parent.getItemAtPosition(position)
-                //Toast.makeText(this, "Spinner 1 selected: $selectedItem", Toast.LENGTH_SHORT).show()
+                val selectedItem = parent.getItemAtPosition(position) as String
+                quizSettings.amount = selectedItem.toLong()
+                if (view != null) {
+                    displayMsg(view, "Number of Questions Selected: $selectedItem")
+                }
             }
 
             R.id.categoriesSpinner -> {
-                val selectedItem = parent.getItemAtPosition(position)
-                //Toast.makeText(this, "Spinner 2 selected: $selectedItem", Toast.LENGTH_SHORT).show()
+                val selectedItem = parent.getItemAtPosition(position) as String
+                quizSettings.category = selectedItem
+                if (view != null) {
+                    displayMsg(view, "Category Selected: $selectedItem")
+                }
             }
 
             R.id.difficultySpinner -> {
-                val selectedItem = parent.getItemAtPosition(position)
-                //Toast.makeText(this, "Spinner 3 selected: $selectedItem", Toast.LENGTH_SHORT).show()
+                val selectedItem = parent.getItemAtPosition(position) as String
+                quizSettings.difficulty = selectedItem
+                if (view != null) {
+                    displayMsg(view, "Difficulty Selected: $selectedItem")
+                }
             }
 
             R.id.typeOfQuestionsSpinner -> {
-                val selectedItem = parent.getItemAtPosition(position)
-                //Toast.makeText(this, "Spinner 4 selected: $selectedItem", Toast.LENGTH_SHORT).show()
+                val selectedItem = parent.getItemAtPosition(position) as String
+
+                if (selectedItem == "True/False") {
+                    quizSettings.type = "boolean"
+                } else if (selectedItem == "Multiple Choice") {
+                    quizSettings.type = "multiple"
+                } else {
+                    quizSettings.type = "Any"
+                }
+
+                if (view != null) {
+                    displayMsg(view, "Type of Questions Selected: $selectedItem")
+                }
+            }
+
+            R.id.questionTimeSpinner -> {
+                val selectedItem = parent.getItemAtPosition(position) as String
+                quizSettings.time = selectedItem
+                if (view != null) {
+                    displayMsg(view, "$selectedItem Time Selected")
+                }
             }
         }
 
@@ -108,5 +169,141 @@ class QuestionSettingsFragment : Fragment(), AdapterView.OnItemSelectedListener 
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         TODO("Not yet implemented")
+    }
+
+    private fun saveSettings(view: View) {
+        val user = mAuth.currentUser
+        if (user != null) {
+            val userId = user.uid
+
+            val quizSettingsMap = mapOf(
+                "amount" to quizSettings.amount,
+                "type" to quizSettings.type,
+                "difficulty" to quizSettings.difficulty,
+                "category" to quizSettings.category,
+                "time" to quizSettings.time
+            )
+
+            db.collection("users")
+                .document(userId)
+                .collection("quiz_settings")
+                .document("settings")
+                .set(quizSettingsMap, SetOptions.merge())
+                .addOnSuccessListener { _ ->
+                    displayMsg(view, "Settings Saved")
+            }
+                .addOnFailureListener { _ ->
+                    displayMsg(view, "Error: Settings Not Saved")
+                }
+        }
+    }
+
+    private fun clearSettings(numOfQuestionsSpinner: Spinner,
+                              categoriesSpinner: Spinner,
+                              difficultySpinner: Spinner,
+                              typeOfQuestionsSpinner: Spinner,
+                              questionsTimeSpinner: Spinner) {
+        quizSettings.amount = 1
+        quizSettings.type = "Any"
+        quizSettings.difficulty = "Any"
+        quizSettings.category = "Any"
+        quizSettings.time = "00:00"
+
+        numOfQuestionsSpinner.setSelection(0)
+        categoriesSpinner.setSelection(0)
+        difficultySpinner.setSelection(0)
+        typeOfQuestionsSpinner.setSelection(0)
+        questionsTimeSpinner.setSelection(0)
+    }
+
+    private fun displayMsg(view: View, msg: String) {
+        val sb = Snackbar.make(view, msg, Snackbar.LENGTH_SHORT)
+        sb.show()
+    }
+
+    private fun setSpinners(numOfQuestionsSpinner: Spinner,
+                            categoriesSpinner: Spinner,
+                            difficultySpinner: Spinner,
+                            typeOfQuestionsSpinner: Spinner,
+                            questionsTimeSpinner: Spinner,
+                            view: View) {
+        val user = mAuth.currentUser
+        if (user != null) {
+            val userId = user.uid
+
+            val documentSettingsRef = db.collection("users")
+                .document(userId)
+                .collection("quiz_settings")
+                .document("settings")
+
+            documentSettingsRef.get().addOnSuccessListener { document ->
+                if (document.exists()) {
+                    quizSettings.amount = document.get("amount") as Long
+                    quizSettings.type = document.get("type") as String
+                    quizSettings.difficulty = document.get("difficulty") as String
+                    quizSettings.category = document.get("category") as String
+                    quizSettings.time = document.get("time") as String
+
+                    numOfQuestionsSpinner.setSelection(quizSettings.amount.toInt())
+
+                    val categoriesSpinnerPos = categories[quizSettings.category]?.minus(8)
+                    if (categoriesSpinnerPos != null) {
+                        categoriesSpinner.setSelection(categoriesSpinnerPos)
+                    }
+
+                    difficultySpinner.setSelection(
+                        when (quizSettings.difficulty) {
+                            "Any" -> 0
+                            "Easy" -> 1
+                            "Medium" -> 2
+                            "Hard" -> 3
+                            else -> 0
+                        }
+                    )
+
+                    typeOfQuestionsSpinner.setSelection(
+                        when (quizSettings.type) {
+                            "Any" -> 0
+                            "multiple" -> 1
+                            else -> 2
+                        }
+                    )
+
+                }
+            }.addOnFailureListener { _ ->
+                displayMsg(view, "Could Not Retrieve Quiz Settings")
+            }
+
+        }
+    }
+
+    companion object {
+        val categories: MutableMap<String, Int> = mutableMapOf(
+            "Any" to 8,
+            "General Knowledge" to 9,
+            "Entertainment: Books" to 10,
+            "Entertainment: Film" to 11,
+            "Entertainment: Music" to 12,
+            "Entertainment: Musicals & Theatres" to 13,
+            "Entertainment: Television" to 14,
+            "Entertainment: Video Games" to 15,
+            "Entertainment: Board Games" to 16,
+            "Science & Nature" to 17,
+            "Science: Computers" to 18,
+            "Science: Mathematics" to 19,
+            "Mythology" to 20,
+            "Sports" to 21,
+            "Geography" to 22,
+            "History" to 23,
+            "Politics" to 24,
+            "Art" to 25,
+            "Celebrities" to 26,
+            "Animals" to 27,
+            "Vehicles" to 28,
+            "Entertainment: Comics" to 29,
+            "Science: Gadgets" to 30,
+            "Entertainment: Japanese Anime & Manga" to 31,
+            "Entertainment: Cartoon & Animations" to 32
+        )
     }
 }

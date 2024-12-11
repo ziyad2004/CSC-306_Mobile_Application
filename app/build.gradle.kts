@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.ion)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     implementation(libs.play.services.auth)
     androidTestImplementation(libs.androidx.junit)

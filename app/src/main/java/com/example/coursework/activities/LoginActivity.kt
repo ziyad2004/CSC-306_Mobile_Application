@@ -21,7 +21,6 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var emailText : EditText
     private lateinit var pwText : EditText
-
     private var mAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,9 +49,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun signIn(view: View) {
-        val homePageIntent = Intent(this, HomePageActivity::class.java)
-        startActivity(homePageIntent)
-        /*
         if ((emailText.text.toString() != "") && (pwText.text.toString() != "")) {
             mAuth.signInWithEmailAndPassword(
                 emailText.text.toString(),
@@ -71,8 +67,6 @@ class LoginActivity : AppCompatActivity() {
         } else {
             displayMsg(view, getString(R.string.login_error_msg))
         }
-
-         */
     }
 
     private fun displayMsg(view: View, msg: String) {

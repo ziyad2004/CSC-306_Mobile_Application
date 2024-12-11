@@ -9,15 +9,6 @@
     android:focusable="true">
 
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/icon"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="6dip"
-        android:src="@mipmap/ic_launcher" />
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/firstLine"
         android:layout_width="fill_parent"
@@ -25,7 +16,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toEndOf="@id/icon"
         android:textSize="22sp" />
 
 </RelativeLayout>

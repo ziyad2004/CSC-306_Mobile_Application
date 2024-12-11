@@ -1,30 +1,40 @@
 package com.example.coursework.activities
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coursework.Question
 import com.example.coursework.R
 import com.example.coursework.adapters.QuestionRecyclerAdapter
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import org.json.JSONArray
 import org.json.JSONObject
 
 class QuizActivity : AppCompatActivity() {
 
     private var quizData = ""
     private var numOfQuestions = 0
+    private var correctAndChosenAnswers: MutableMap<String, String> = mutableMapOf()
+    private var intentFilter: IntentFilter? = null
+    private var numOfCorrectAnswers = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
+
+        intentFilter = IntentFilter()
+        intentFilter!!.addAction(BROADCAST_ANSWER_ACTION)
+
+
+        val submitBtn = findViewById<Button>(R.id.submitQuizBtn)
+        submitBtn.setOnClickListener { _ -> submitQuiz() }
+
 
         val intentInfo = intent.extras
         if (intentInfo != null) {
@@ -69,16 +79,69 @@ class QuizActivity : AppCompatActivity() {
 
             val incorrectAnswersArray = wrongAnswersList.toTypedArray()
 
-            val questionObject = Question(question,
-                                    R.drawable.hourglass,
+            val questionObject = Question(i,
+                                    question,
                                     difficulty,
                                     category,
                                     correctAnswer,
                                     incorrectAnswersArray,
                                     typeIsBoolean)
             list.add(questionObject)
+            correctAndChosenAnswers["$i$correctAnswer"] = ""
             Log.d("RecyclerView", "Binding position: , question: $question")
         }
         return list
+    }
+
+
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.action) {
+                BROADCAST_ANSWER_ACTION -> {
+                    addChosenAnswer(intent.getStringExtra("questionId"),
+                        intent.getStringExtra("chosenAnswer"))
+                }
+            }
+        }
+    }
+
+    private fun addChosenAnswer(questionId: String? = "-1", chosenAnswer: String?) {
+        var answerChosen = ""
+        if (chosenAnswer != null) {
+            answerChosen = chosenAnswer
+        }
+        for ((key, _) in correctAndChosenAnswers) {
+            if (questionId?.let { key.startsWith(it) } == true) {
+                correctAndChosenAnswers[key] = answerChosen
+            }
+        }
+        Log.d("chosenAnswersArray", "$correctAndChosenAnswers")
+    }
+
+    public override fun onResume() {
+        super.onResume()
+        registerReceiver(receiver, intentFilter, RECEIVER_NOT_EXPORTED)
+    }
+
+    public override fun onPause() {
+        registerReceiver(receiver, intentFilter, RECEIVER_NOT_EXPORTED)
+        super.onPause()
+    }
+
+    private fun submitQuiz() {
+        for ((key, value) in correctAndChosenAnswers) {
+            val correctAnswer = key.substring(1)
+            if (correctAnswer == value) {
+                numOfCorrectAnswers++
+            }
+        }
+        val homePageIntent = Intent(this, HomePageActivity::class.java)
+        homePageIntent.putExtra("numOfCorrectAnswers", numOfCorrectAnswers)
+        homePageIntent.putExtra("numOfQuestions", numOfQuestions)
+        startActivity(homePageIntent)
+    }
+
+    companion object {
+        const val BROADCAST_ANSWER_ACTION = "com.example.broadcast.answer"
     }
 }

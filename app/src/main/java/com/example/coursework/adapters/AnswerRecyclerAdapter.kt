@@ -1,21 +1,23 @@
 package com.example.coursework.adapters
 
-import android.view.Gravity
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coursework.Answer
-import com.example.coursework.Question
 import com.example.coursework.R
-import com.example.coursework.fragments.MultipleChoiceQuestionFragment
+import com.example.coursework.activities.QuizActivity
+import com.example.coursework.fragments.QuestionFragment
 import com.google.android.material.snackbar.Snackbar
 
-class AnswerRecyclerAdapter (private val imageModelArrayList: MutableList<Answer>) : RecyclerView.Adapter<AnswerRecyclerAdapter.ViewHolder>() {
+class AnswerRecyclerAdapter (
+    private val imageModelArrayList: MutableList<Answer>,
+    private val fragment: QuestionFragment,
+    private val context: Context)
+    : RecyclerView.Adapter<AnswerRecyclerAdapter.ViewHolder>() {
 
     /*
      * Inflate our views using the layout defined in row_layout.xml
@@ -46,8 +48,6 @@ class AnswerRecyclerAdapter (private val imageModelArrayList: MutableList<Answer
      * The parent class that handles layout inflation and child view use
      */
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
-
-        var imgView = itemView.findViewById<View>(R.id.icon) as ImageView
         var txtMsg = itemView.findViewById<View>(R.id.firstLine) as TextView
 
         init {
@@ -56,19 +56,14 @@ class AnswerRecyclerAdapter (private val imageModelArrayList: MutableList<Answer
 
         override fun onClick(v: View) {
             val info = imageModelArrayList[adapterPosition]
-            if (txtMsg.text == info.correctAnswer) {
-                val snackBar = Snackbar.make(v, "correct answer clicked", Snackbar.LENGTH_LONG)
-                snackBar.show()
-            } else {
-                val snackBar = Snackbar.make(v, "wrong answer clicked", Snackbar.LENGTH_LONG)
-                snackBar.show()
-            }
+            val broadcastIntent = Intent()
+            broadcastIntent.action = QuizActivity.BROADCAST_ANSWER_ACTION
+            broadcastIntent.putExtra("questionId", fragment.getQuestionId().toString())
+            broadcastIntent.putExtra("chosenAnswer", info.displayedAnswer)
+            context.sendBroadcast(broadcastIntent)
+
+            val snackBar = Snackbar.make(v, "${info.displayedAnswer} clicked", Snackbar.LENGTH_LONG)
+            snackBar.show()
         }
     }
 }
-
-
-
-
-//var intent = Intent(itemView.context, TeamDetail::class.java)
-//itemView.context.startActivity(intent)

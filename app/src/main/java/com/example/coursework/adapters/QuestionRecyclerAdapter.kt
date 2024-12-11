@@ -1,20 +1,15 @@
 package com.example.coursework.adapters
 
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coursework.Question
 import com.example.coursework.R
-import com.example.coursework.fragments.MultipleChoiceQuestionFragment
-import com.google.android.material.snackbar.Snackbar
+import com.example.coursework.fragments.QuestionFragment
 
 class QuestionRecyclerAdapter (private val imageModelArrayList: MutableList<Question>) : RecyclerView.Adapter<QuestionRecyclerAdapter.ViewHolder>() {
 
@@ -33,7 +28,6 @@ class QuestionRecyclerAdapter (private val imageModelArrayList: MutableList<Ques
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val info = imageModelArrayList[position]
-        info.image?.let { holder.imgView.setImageResource(it) }
         holder.txtMsg.text = info.question
     }
 
@@ -48,7 +42,6 @@ class QuestionRecyclerAdapter (private val imageModelArrayList: MutableList<Ques
      * The parent class that handles layout inflation and child view use
      */
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
-        var imgView = itemView.findViewById<View>(R.id.icon) as ImageView
         var txtMsg = itemView.findViewById<View>(R.id.firstLine) as TextView
 
         init {
@@ -56,14 +49,15 @@ class QuestionRecyclerAdapter (private val imageModelArrayList: MutableList<Ques
         }
 
         override fun onClick(v: View) {
-
             val info = imageModelArrayList[adapterPosition]
             val bundle = Bundle()
             bundle.putString("correctAnswer", info.correctAnswer)
             bundle.putStringArray("incorrectAnswers", info.incorrectAnswers)
             bundle.putBoolean("isBoolean", info.isBoolean)
+            bundle.putInt("questionId", info.id)
+            bundle.putString("question", info.question)
 
-            val fragment = MultipleChoiceQuestionFragment() // Replace with your fragment class
+            val fragment = QuestionFragment() // Replace with your fragment class
             fragment.arguments = bundle
             val fragmentManager = (v.context as AppCompatActivity).supportFragmentManager
 
@@ -73,16 +67,6 @@ class QuestionRecyclerAdapter (private val imageModelArrayList: MutableList<Ques
                 addToBackStack(null)  // Ensures the fragment is added to the back stack
                 commit()
             }
-
-            val msg = txtMsg.text
-            val snackBar = Snackbar.make(v, "question clicked", Snackbar.LENGTH_LONG)
-            snackBar.show()
         }
     }
 }
-
-
-
-
-//var intent = Intent(itemView.context, TeamDetail::class.java)
-//itemView.context.startActivity(intent)

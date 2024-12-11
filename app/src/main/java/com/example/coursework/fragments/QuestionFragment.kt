@@ -6,22 +6,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coursework.Answer
-import com.example.coursework.Question
 import com.example.coursework.R
 import com.example.coursework.adapters.AnswerRecyclerAdapter
 
 
-class MultipleChoiceQuestionFragment : Fragment(){
+class QuestionFragment : Fragment(){
 
     private var correctAnswer = ""
     private var incorrectAnswers: Array<String> = arrayOf()
     private var typeIsBoolean = false
+    private var questionId = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        inflater.inflate(R.layout.fragment_multiple_choice_question, container, false)!!
+        inflater.inflate(R.layout.fragment_question, container, false)!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,6 +34,10 @@ class MultipleChoiceQuestionFragment : Fragment(){
         correctAnswer = bundle?.getString("correctAnswer").toString()
         incorrectAnswers = bundle?.getStringArray("incorrectAnswers")!!
         typeIsBoolean = bundle.getBoolean("isBoolean")
+        questionId = bundle.getInt("questionId")
+
+        val questionDescriptionTextView = view.findViewById<View>(R.id.answerQuestionDescription) as TextView
+        questionDescriptionTextView.text = bundle.getString("question").toString()
 
         val numOfQuestionsList = populateQuestionChoiceList()
 
@@ -39,7 +45,7 @@ class MultipleChoiceQuestionFragment : Fragment(){
         val layoutManager = LinearLayoutManager(view.context) // Get the layout manager
         recyclerView.layoutManager = layoutManager
 
-        val mAdapter = AnswerRecyclerAdapter(numOfQuestionsList)
+        val mAdapter = this.context?.let { AnswerRecyclerAdapter(numOfQuestionsList, this, it) }
         recyclerView.adapter = mAdapter
     }
 
@@ -51,12 +57,18 @@ class MultipleChoiceQuestionFragment : Fragment(){
             4
         }
 
-        val answersArray = arrayOf(*incorrectAnswers, correctAnswer)
-        val shuffledAnswersArray = answersArray.toList().shuffled()
-        Log.i("Arrays", "Answers Array: $answersArray, Shuffled Array: $shuffledAnswersArray")
+        val answersArray = arrayOf(correctAnswer, *incorrectAnswers)
+        var answersList: List<String> = mutableListOf()
+        answersList = if (typeIsBoolean) {
+            answersArray.toList().sortedByDescending { it.first() }
+        } else {
+            answersArray.toList().shuffled()
+        }
 
-        for (i in 0 until 4) {
-            val answer = Answer(correctAnswer, shuffledAnswersArray[i])
+        Log.i("Arrays", "Answers Array: $answersArray, Shuffled Array: $answersList")
+
+        for (i in 0 until numOfAnswers) {
+            val answer = Answer(correctAnswer, answersList[i])
             list.add(answer)
         }
         return list
@@ -67,5 +79,9 @@ class MultipleChoiceQuestionFragment : Fragment(){
         // Show the RecyclerView when leaving the fragment
         val recyclerView = activity?.findViewById<RecyclerView>(R.id.quizRecyclerView)
         recyclerView?.visibility = View.VISIBLE
+    }
+
+    fun getQuestionId(): Int {
+        return this.questionId
     }
 }
