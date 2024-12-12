@@ -19,7 +19,7 @@ import com.google.firebase.firestore.SetOptions
 
 class QuestionSettingsFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
-    private var areSpinnersInitialised = true
+    private var areSpinnersInitialised = false
     private var mAuth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
     private var quizSettings = QuizSettings (
@@ -87,19 +87,19 @@ class QuestionSettingsFragment : Fragment(), AdapterView.OnItemSelectedListener 
                 questionsTimeSpinner.adapter = adapter
             }
 
-        questionsTimeSpinner.onItemSelectedListener = this
         numOfQuestionsSpinner.onItemSelectedListener = this
         categoriesSpinner.onItemSelectedListener = this
         difficultySpinner.onItemSelectedListener = this
         typeOfQuestionsSpinner.onItemSelectedListener = this
+        questionsTimeSpinner.onItemSelectedListener = this
         areSpinnersInitialised = true
 
 
-        setSpinners(questionsTimeSpinner,
-            numOfQuestionsSpinner,
+        getQuizSettings(numOfQuestionsSpinner,
             categoriesSpinner,
             difficultySpinner,
             typeOfQuestionsSpinner,
+            questionsTimeSpinner,
             view)
 
         val saveSettingsBtn = view.findViewById<Button>(R.id.saveSettingsBtn)
@@ -221,7 +221,7 @@ class QuestionSettingsFragment : Fragment(), AdapterView.OnItemSelectedListener 
         sb.show()
     }
 
-    private fun setSpinners(numOfQuestionsSpinner: Spinner,
+    private fun getQuizSettings(numOfQuestionsSpinner: Spinner,
                             categoriesSpinner: Spinner,
                             difficultySpinner: Spinner,
                             typeOfQuestionsSpinner: Spinner,
@@ -244,36 +244,55 @@ class QuestionSettingsFragment : Fragment(), AdapterView.OnItemSelectedListener 
                     quizSettings.category = document.get("category") as String
                     quizSettings.time = document.get("time") as String
 
-                    numOfQuestionsSpinner.setSelection(quizSettings.amount.toInt())
-
-                    val categoriesSpinnerPos = categories[quizSettings.category]?.minus(8)
-                    if (categoriesSpinnerPos != null) {
-                        categoriesSpinner.setSelection(categoriesSpinnerPos)
-                    }
-
-                    difficultySpinner.setSelection(
-                        when (quizSettings.difficulty) {
-                            "Any" -> 0
-                            "Easy" -> 1
-                            "Medium" -> 2
-                            "Hard" -> 3
-                            else -> 0
-                        }
-                    )
-
-                    typeOfQuestionsSpinner.setSelection(
-                        when (quizSettings.type) {
-                            "Any" -> 0
-                            "multiple" -> 1
-                            else -> 2
-                        }
-                    )
-
+                    setSpinners(numOfQuestionsSpinner,
+                        categoriesSpinner,
+                        difficultySpinner,
+                        typeOfQuestionsSpinner,
+                        questionsTimeSpinner)
                 }
             }.addOnFailureListener { _ ->
                 displayMsg(view, "Could Not Retrieve Quiz Settings")
             }
 
+        }
+    }
+
+    private fun setSpinners(numOfQuestionsSpinner: Spinner,
+                            categoriesSpinner: Spinner,
+                            difficultySpinner: Spinner,
+                            typeOfQuestionsSpinner: Spinner,
+                            questionsTimeSpinner: Spinner) {
+
+        numOfQuestionsSpinner.setSelection(quizSettings.amount.toInt() - 1)
+
+        val categoriesSpinnerPos = categories[quizSettings.category]?.minus(8)
+
+        if (categoriesSpinnerPos != null) {
+            categoriesSpinner.setSelection(categoriesSpinnerPos)
+        }
+
+        difficultySpinner.setSelection(
+            when (quizSettings.difficulty) {
+                "Any" -> 0
+                "Easy" -> 1
+                "Medium" -> 2
+                "Hard" -> 3
+                else -> 0
+            }
+        )
+
+        typeOfQuestionsSpinner.setSelection(
+            when (quizSettings.type) {
+                "Any" -> 0
+                "multiple" -> 1
+                else -> 2
+            }
+        )
+
+        if (quizSettings.time.startsWith("0")) {
+            questionsTimeSpinner.setSelection(quizSettings.time[1].toString().toInt())
+        } else {
+            questionsTimeSpinner.setSelection(quizSettings.time.take(2).toInt())
         }
     }
 

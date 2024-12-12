@@ -27,6 +27,7 @@ class HomePageActivity : AppCompatActivity() {
         "Any",
         "00:00"
     )
+    private var quizSettingsSet = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,18 +53,21 @@ class HomePageActivity : AppCompatActivity() {
     }
 
     private fun startQuiz() {
-        val url = getUrl()
-        Ion.with(this)
-            .load(url)
-            .asString()
-            .setCallback {ex, result ->
-                val quizPageIntent = Intent(this, QuizActivity::class.java)
-                quizPageIntent.putExtra("quizData", result)
-                quizPageIntent.putExtra("numOfQuestions", quizSettings.amount.toInt())
-                startActivity(quizPageIntent)
-            }
+        if (quizSettingsSet) {
+            val url = getUrl()
+            Ion.with(this)
+                .load(url)
+                .asString()
+                .setCallback { ex, result ->
+                    val quizPageIntent = Intent(this, QuizActivity::class.java)
+                    quizPageIntent.putExtra("quizData", result)
+                    quizPageIntent.putExtra("numOfQuestions", quizSettings.amount.toInt())
+                    startActivity(quizPageIntent)
+                }
+        }
     }
 
+    // IF NOTHING IS DISPLAYED CHECK URL
     private fun getUrl(): String {
         var fullURL = "https://opentdb.com/api.php?amount="
         var amountQuery = "1"
@@ -108,6 +112,7 @@ class HomePageActivity : AppCompatActivity() {
                     quizSettings.difficulty = document.get("difficulty") as String
                     quizSettings.category = document.get("category") as String
                     quizSettings.time = document.get("time") as String
+                    quizSettingsSet = true
                 }
             }.addOnFailureListener { _ ->
                 displayMsg(view, "Could Not Retrieve Quiz Settings")

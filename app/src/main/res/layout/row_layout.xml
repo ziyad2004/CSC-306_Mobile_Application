@@ -16,6 +16,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
+        android:text="testing"
         android:textSize="22sp" />
 
 </RelativeLayout>

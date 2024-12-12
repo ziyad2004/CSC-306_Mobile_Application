@@ -24,6 +24,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="@string/sign_in" />
+            android:text="@string/submit_quiz_btn" />
     </FrameLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>

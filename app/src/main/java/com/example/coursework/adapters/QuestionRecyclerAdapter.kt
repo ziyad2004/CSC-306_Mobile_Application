@@ -53,7 +53,7 @@ class QuestionRecyclerAdapter (private val imageModelArrayList: MutableList<Ques
             val bundle = Bundle()
             bundle.putString("correctAnswer", info.correctAnswer)
             bundle.putStringArray("incorrectAnswers", info.incorrectAnswers)
-            bundle.putBoolean("isBoolean", info.isBoolean)
+            bundle.putString("type", info.type)
             bundle.putInt("questionId", info.id)
             bundle.putString("question", info.question)
 

@@ -11,6 +11,6 @@ data class Question(val id: Int,
                     val difficulty: String,
                     val category: String,
                     val correctAnswer: String,
-                    val incorrectAnswers: Array<String>,
-                    val isBoolean: Boolean)
+                    var incorrectAnswers: Array<String>,
+                    val type: String)
 

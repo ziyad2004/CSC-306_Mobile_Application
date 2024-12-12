@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +18,7 @@ class QuestionFragment : Fragment(){
 
     private var correctAnswer = ""
     private var incorrectAnswers: Array<String> = arrayOf()
-    private var typeIsBoolean = false
+    private var type = ""
     private var questionId = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -33,7 +32,7 @@ class QuestionFragment : Fragment(){
         val bundle = arguments
         correctAnswer = bundle?.getString("correctAnswer").toString()
         incorrectAnswers = bundle?.getStringArray("incorrectAnswers")!!
-        typeIsBoolean = bundle.getBoolean("isBoolean")
+        type = bundle.getString("type").toString()
         questionId = bundle.getInt("questionId")
 
         val questionDescriptionTextView = view.findViewById<View>(R.id.answerQuestionDescription) as TextView
@@ -51,18 +50,20 @@ class QuestionFragment : Fragment(){
 
     private fun populateQuestionChoiceList(): ArrayList<Answer> {
         val list = ArrayList<Answer>()
-        val numOfAnswers = if (typeIsBoolean) {
-            2
-        } else {
-            4
+
+        var numOfAnswers = 4
+        if (incorrectAnswers.size == 1) {
+            numOfAnswers = 2
         }
+
 
         val answersArray = arrayOf(correctAnswer, *incorrectAnswers)
         var answersList: List<String> = mutableListOf()
-        answersList = if (typeIsBoolean) {
-            answersArray.toList().sortedByDescending { it.first() }
-        } else {
+
+        answersList = if (numOfAnswers == 4) {
             answersArray.toList().shuffled()
+        } else {
+            answersArray.toList().sortedByDescending { it.first() }
         }
 
         Log.i("Arrays", "Answers Array: $answersArray, Shuffled Array: $answersList")

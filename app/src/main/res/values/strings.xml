@@ -118,7 +118,6 @@
         <item>23:00</item>
     </string-array>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="question_description">question description</string>
     <string name="enter_new_username">Enter New Username</string>
     <string name="change_username">CHANGE USERNAME</string>
@@ -128,6 +127,8 @@
     <string name="change_email">CHANGE EMAIL</string>
     <string name="question_refresh_time">Question Refresh Time</string>
     <string name="previous_responses_action">Previous Responses</string>
+    <string name="start_quiz_btn">Start Quiz</string>
+    <string name="submit_quiz_btn">Submit Quiz</string>
 
 
 </resources>
