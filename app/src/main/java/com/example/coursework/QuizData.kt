@@ -14,8 +14,7 @@ object QuizData {
     }
 
     fun getQuiz(quizName: String): Quiz {
-        val id = quizName.last().toString().toInt() - 1
-        Log.i("quizName", "quizs: $quizName \n quizid $id \n quizSingetonLength: ${quizs.size} \n returnquiz: ${quizs[id]}")
+        val id = quizName.drop(4).toInt() - 1
         return quizs[id]
     }
 

@@ -80,7 +80,6 @@ class QuizFragment : Fragment(){
             ))
         }
 
-        Log.i("quizName", "quizname: $quizName \n quizVariable: $quiz \n methodCall: ${QuizData.getQuiz(quizName)}")
         return questionsList
     }
     

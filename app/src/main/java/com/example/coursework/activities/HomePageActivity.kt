@@ -1,5 +1,10 @@
 package com.example.coursework.activities
 
+import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -16,10 +21,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.koushikdutta.ion.Ion
 import com.example.coursework.QuizSettings
 
+
+
 class HomePageActivity : AppCompatActivity() {
 
     private var mAuth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
+    private lateinit var quizResults : TextView
     private var quizSettings = QuizSettings (
         1,
         "Any",
@@ -35,7 +43,7 @@ class HomePageActivity : AppCompatActivity() {
 
         val intentInfo = intent.extras
         if (intentInfo != null) {
-            val quizResults = findViewById<TextView>(R.id.quizResultsTextView)
+            quizResults = findViewById(R.id.quizResultsTextView)
             quizResults.text = "Results: " + intentInfo.getInt("numOfCorrectAnswers") +
                     " out of " + intentInfo.getInt("numOfQuestions")
         }
@@ -51,6 +59,7 @@ class HomePageActivity : AppCompatActivity() {
         val startQuizBtn = findViewById<Button>(R.id.startQuizBtn)
         startQuizBtn.setOnClickListener {_ -> startQuiz()}
     }
+
 
     private fun startQuiz() {
         if (quizSettingsSet) {

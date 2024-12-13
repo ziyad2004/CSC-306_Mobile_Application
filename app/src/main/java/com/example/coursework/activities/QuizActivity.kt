@@ -32,6 +32,7 @@ class QuizActivity : AppCompatActivity() {
     private var mAuth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
     private var lastQuizId = 0
+    private var lastQuizIdRetrieved = false
     private val quizStatsMap = mutableMapOf (
         "quizsCompleted" to 0,
         "hardQuizsCompleted" to 0,
@@ -149,7 +150,7 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun submitQuiz() {
-        if (lastQuizId != 0) {
+        if (lastQuizIdRetrieved) {
             var i = 0
             for ((key, value) in correctAndChosenAnswers) {
                 val correctAnswer = key.substring(1)
@@ -192,7 +193,7 @@ class QuizActivity : AppCompatActivity() {
                 (quizResultsMap["questions"] as MutableList<Map<String, Any>>).add(questionResultMap)
             }
 
-            val quizId = "quiz${lastQuizId + 1}"
+            val quizId = "quiz${(lastQuizId + 1).toString().padStart(4, '0')}"
             db.collection("users")
                 .document(userId)
                 .collection("quizzes")
@@ -275,6 +276,7 @@ class QuizActivity : AppCompatActivity() {
                         }
                     }
                 }
+                lastQuizIdRetrieved = true
             }
         }
     }
