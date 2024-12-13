@@ -2,22 +2,24 @@ package com.example.coursework.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coursework.Answer
+import com.example.coursework.Quiz
 import com.example.coursework.R
 import com.example.coursework.activities.QuizActivity
 import com.example.coursework.fragments.QuestionFragment
+import com.example.coursework.fragments.QuizFragment
 import com.google.android.material.snackbar.Snackbar
 
-class AnswerRecyclerAdapter (
-    private val answerArrayList: MutableList<Answer>,
-    private val fragment: QuestionFragment,
-    private val context: Context)
-    : RecyclerView.Adapter<AnswerRecyclerAdapter.ViewHolder>() {
+class PreviousResponsesRecyclerAdapter (
+    private val quizArrayList: MutableList<Quiz>)
+    : RecyclerView.Adapter<PreviousResponsesRecyclerAdapter.ViewHolder>() {
 
     /*
      * Inflate our views using the layout defined in row_layout.xml
@@ -30,18 +32,19 @@ class AnswerRecyclerAdapter (
     }
 
     /*
-     * Bind the data to the child views of the ViewHolder
-     */
+   * Bind the data to the child views of the ViewHolder
+   */
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val info = answerArrayList[position]
-        holder.txtMsg.text = info.displayedAnswer
+        val info = quizArrayList[position]
+        holder.txtMsg.text = info.quizName
     }
 
     /*
      * Get the maximum size of the
      */
     override fun getItemCount(): Int {
-        return answerArrayList.size
+        return quizArrayList.size
     }
 
     /*
@@ -55,15 +58,22 @@ class AnswerRecyclerAdapter (
         }
 
         override fun onClick(v: View) {
-            val info = answerArrayList[adapterPosition]
-            val broadcastIntent = Intent()
-            broadcastIntent.action = QuizActivity.BROADCAST_ANSWER_ACTION
-            broadcastIntent.putExtra("questionId", fragment.getQuestionId().toString())
-            broadcastIntent.putExtra("chosenAnswer", info.displayedAnswer)
-            context.sendBroadcast(broadcastIntent)
+            val info = quizArrayList[adapterPosition]
+            val bundle = Bundle()
+            bundle.putString("quizName", info.quizName)
+            bundle.putInt("numOfQuestions", info.numOfQuestions)
+            bundle.putInt("score", info.score)
 
-            val snackBar = Snackbar.make(v, "${info.displayedAnswer} clicked", Snackbar.LENGTH_LONG)
-            snackBar.show()
+            val fragment = QuizFragment() // Replace with your fragment class
+            fragment.arguments = bundle
+            val fragmentManager = (v.context as AppCompatActivity).supportFragmentManager
+
+            // Begin a transaction to replace the fragment
+            fragmentManager.beginTransaction().apply {
+                replace(R.id.previousResponsesFragmentContainer, fragment, "CURRENTLY_OPENED_FRAGMENT")
+                addToBackStack(null)  // Ensures the fragment is added to the back stack
+                commit()
+            }
         }
     }
 }

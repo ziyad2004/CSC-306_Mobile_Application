@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,9 @@ class QuestionFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val questionRecyclerView = activity?.findViewById<RecyclerView>(R.id.quizRecyclerView)
+        val submitQuizBtn = activity?.findViewById<Button>(R.id.submitQuizBtn)
         questionRecyclerView?.visibility = View.GONE
+        submitQuizBtn?.visibility = View.GONE
 
         val bundle = arguments
         correctAnswer = bundle?.getString("correctAnswer").toString()
@@ -35,16 +38,16 @@ class QuestionFragment : Fragment(){
         type = bundle.getString("type").toString()
         questionId = bundle.getInt("questionId")
 
-        val questionDescriptionTextView = view.findViewById<View>(R.id.answerQuestionDescription) as TextView
+        val questionDescriptionTextView = view.findViewById<View>(R.id.questionDescription) as TextView
         questionDescriptionTextView.text = bundle.getString("question").toString()
 
-        val numOfQuestionsList = populateQuestionChoiceList()
+        val numOfAnswersList = populateQuestionChoiceList()
 
-        val recyclerView = view.findViewById<View>(R.id.multipleChoiceRecycler) as RecyclerView // Bind to the recyclerview in the layout
+        val recyclerView = view.findViewById<View>(R.id.questionRecyclerView) as RecyclerView // Bind to the recyclerview in the layout
         val layoutManager = LinearLayoutManager(view.context) // Get the layout manager
         recyclerView.layoutManager = layoutManager
 
-        val mAdapter = this.context?.let { AnswerRecyclerAdapter(numOfQuestionsList, this, it) }
+        val mAdapter = this.context?.let { AnswerRecyclerAdapter(numOfAnswersList, this, it) }
         recyclerView.adapter = mAdapter
     }
 
@@ -79,6 +82,8 @@ class QuestionFragment : Fragment(){
         super.onPause()
         // Show the RecyclerView when leaving the fragment
         val recyclerView = activity?.findViewById<RecyclerView>(R.id.quizRecyclerView)
+        val submitQuizBtn = activity?.findViewById<Button>(R.id.submitQuizBtn)
+        submitQuizBtn?.visibility = View.VISIBLE
         recyclerView?.visibility = View.VISIBLE
     }
 

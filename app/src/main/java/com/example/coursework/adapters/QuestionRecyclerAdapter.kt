@@ -11,7 +11,7 @@ import com.example.coursework.Question
 import com.example.coursework.R
 import com.example.coursework.fragments.QuestionFragment
 
-class QuestionRecyclerAdapter (private val imageModelArrayList: MutableList<Question>) : RecyclerView.Adapter<QuestionRecyclerAdapter.ViewHolder>() {
+class QuestionRecyclerAdapter (private val questionArrayList: MutableList<Question>) : RecyclerView.Adapter<QuestionRecyclerAdapter.ViewHolder>() {
 
     /*
      * Inflate our views using the layout defined in row_layout.xml
@@ -27,7 +27,7 @@ class QuestionRecyclerAdapter (private val imageModelArrayList: MutableList<Ques
      * Bind the data to the child views of the ViewHolder
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val info = imageModelArrayList[position]
+        val info = questionArrayList[position]
         holder.txtMsg.text = info.question
     }
 
@@ -35,7 +35,7 @@ class QuestionRecyclerAdapter (private val imageModelArrayList: MutableList<Ques
      * Get the maximum size of the
      */
     override fun getItemCount(): Int {
-        return imageModelArrayList.size
+        return questionArrayList.size
     }
 
     /*
@@ -49,7 +49,7 @@ class QuestionRecyclerAdapter (private val imageModelArrayList: MutableList<Ques
         }
 
         override fun onClick(v: View) {
-            val info = imageModelArrayList[adapterPosition]
+            val info = questionArrayList[adapterPosition]
             val bundle = Bundle()
             bundle.putString("correctAnswer", info.correctAnswer)
             bundle.putStringArray("incorrectAnswers", info.incorrectAnswers)
@@ -63,7 +63,7 @@ class QuestionRecyclerAdapter (private val imageModelArrayList: MutableList<Ques
 
             // Begin a transaction to replace the fragment
             fragmentManager.beginTransaction().apply {
-                replace(R.id.fragment_container, fragment, "CURRENTLY_OPENED_FRAGMENT")
+                replace(R.id.quizFragmentContainer, fragment, "CURRENTLY_OPENED_FRAGMENT")
                 addToBackStack(null)  // Ensures the fragment is added to the back stack
                 commit()
             }

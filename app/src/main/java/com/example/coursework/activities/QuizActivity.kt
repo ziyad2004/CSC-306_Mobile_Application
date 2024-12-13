@@ -18,6 +18,7 @@ import com.example.coursework.R
 import com.example.coursework.adapters.QuestionRecyclerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import org.json.JSONObject
 
 class QuizActivity : AppCompatActivity() {
@@ -31,6 +32,14 @@ class QuizActivity : AppCompatActivity() {
     private var mAuth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
     private var lastQuizId = 0
+    private val quizStatsMap = mutableMapOf (
+        "quizsCompleted" to 0,
+        "hardQuizsCompleted" to 0,
+        "easyQuizsCompleted" to 0,
+        "mediumQuizsCompleted" to 0,
+        "numOfQuestionsAnswered" to 0,
+        "numOfCorrectlyChosenAnswers" to 0
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +49,7 @@ class QuizActivity : AppCompatActivity() {
         intentFilter!!.addAction(BROADCAST_ANSWER_ACTION)
 
         getLastQuizId()
+        getUserQuizStats()
 
         val submitBtn = findViewById<Button>(R.id.submitQuizBtn)
         submitBtn.setOnClickListener { _ -> submitQuiz() }
@@ -51,7 +61,7 @@ class QuizActivity : AppCompatActivity() {
             numOfQuestions = intentInfo.getInt("numOfQuestions")
         }
 
-        val numOfQuestionsList = populateNumOfQuestionsList(quizData)
+        val numOfQuestionsList = populateQuestionsList(quizData)
 
         val recyclerView = findViewById<View>(R.id.quizRecyclerView) as RecyclerView // Bind to the recyclerview in the layout
         val layoutManager = LinearLayoutManager(this) // Get the layout manager
@@ -62,7 +72,7 @@ class QuizActivity : AppCompatActivity() {
     }
 
 
-    private fun populateNumOfQuestionsList(quizData: String): ArrayList<Question> {
+    private fun populateQuestionsList(quizData: String): ArrayList<Question> {
         val list = ArrayList<Question>()
         val quizJsonArray = JSONObject(quizData)
         val resultsArray = quizJsonArray.getJSONArray("results")
@@ -73,7 +83,8 @@ class QuizActivity : AppCompatActivity() {
             val wrongAnswersJsonArray = result.getJSONArray("incorrect_answers")
             val type = result.getString("type")
             val difficulty = result.getString("difficulty")
-            val category = result.getString("category")
+            val category = Html.fromHtml(result.getString("category"),
+                Html.FROM_HTML_MODE_LEGACY).toString()
             val question = Html.fromHtml(result.getString("question"),
                 Html.FROM_HTML_MODE_LEGACY).toString()
             val correctAnswer = Html.fromHtml(result.getString("correct_answer"),
@@ -182,21 +193,67 @@ class QuizActivity : AppCompatActivity() {
             }
 
             val quizId = "quiz${lastQuizId + 1}"
-            Log.i("savequiz", "lastquizid: ${getLastQuizId()} \n" +
-                    "quizId: $quizId")
             db.collection("users")
                 .document(userId)
                 .collection("quizzes")
                 .document(quizId)
                 .set(quizResultsMap)
                 .addOnSuccessListener { _ ->
-                    calculateQuizStats()
+                    calculateUserQuizStats(quizResultsMap)
                 }
         }
     }
 
-    private fun calculateQuizStats() {
+    private fun calculateUserQuizStats(quizResults: HashMap<String, Any>) {
+        val user = mAuth.currentUser
+        if (user != null) {
+            val userId = user.uid
 
+            quizStatsMap["quizsCompleted"] = quizStatsMap["quizsCompleted"]!! + 1
+
+            if (quizResults["difficulty"] == "hard") {
+                quizStatsMap["hardQuizsCompleted"] = quizStatsMap["hardQuizsCompleted"]!! + 1
+            } else if (quizResults["difficulty"] == "medium") {
+                quizStatsMap["mediumQuizsCompleted"] = quizStatsMap["mediumQuizsCompleted"]!! + 1
+            } else if (quizResults["difficulty"] == "easy") {
+                quizStatsMap["easyQuizsCompleted"] = quizStatsMap["easyQuizsCompleted"]!! + 1
+            }
+
+            quizStatsMap["numOfQuestionsAnswered"] =
+                quizStatsMap["numOfQuestionsAnswered"]!! + quizResults["numOfQuestions"] as Int
+
+            quizStatsMap["numOfCorrectlyChosenAnswers"] =
+                quizStatsMap["numOfCorrectlyChosenAnswers"]!! + quizResults["score"] as Int
+
+            db.collection("users")
+                .document(userId)
+                .collection("quiz_stats")
+                .document("stats")
+                .set(quizStatsMap, SetOptions.merge())
+        }
+    }
+
+    private fun getUserQuizStats() {
+        val user = mAuth.currentUser
+        if (user != null) {
+            val userId = user.uid
+
+            val documentQuizStatsRef = db.collection("users")
+                .document(userId)
+                .collection("quiz_stats")
+                .document("stats")
+
+            documentQuizStatsRef.get().addOnSuccessListener { document ->
+                if (document.exists()) {
+                    quizStatsMap["quizsCompleted"] = (document.get("quizsCompleted") as Long).toInt()
+                    quizStatsMap["hardQuizsCompleted"] = (document.get("hardQuizsCompleted") as Long).toInt()
+                    quizStatsMap["easyQuizsCompleted"] = (document.get("easyQuizsCompleted") as Long).toInt()
+                    quizStatsMap["mediumQuizsCompleted"] = (document.get("mediumQuizsCompleted") as Long).toInt()
+                    quizStatsMap["numOfQuestionsAnswered"] = (document.get("numOfQuestionsAnswered") as Long).toInt()
+                    quizStatsMap["numOfCorrectlyChosenAnswers"] = (document.get("numOfCorrectlyChosenAnswers") as Long).toInt()
+                }
+            }
+        }
     }
 
     private fun getLastQuizId() {

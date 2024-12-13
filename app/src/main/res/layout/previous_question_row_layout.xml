@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:id="@+id/settingsRowLayout"
+    android:layout_height="120dp"
+    android:padding="6dip"
+    android:background="@drawable/selector"
+    android:focusable="true">
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/questionTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/correctAnswerTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_marginTop="70dp"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/chosenAnswerTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_marginTop="90dp"/>
+</RelativeLayout>

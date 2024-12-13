@@ -180,7 +180,7 @@ class QuestionSettingsFragment : Fragment(), AdapterView.OnItemSelectedListener 
                 "amount" to quizSettings.amount,
                 "type" to quizSettings.type,
                 "difficulty" to quizSettings.difficulty,
-                "category" to quizSettings.category,
+                "category" to quizSettings.category.replace("&amp;", "&"),
                 "time" to quizSettings.time
             )
 
